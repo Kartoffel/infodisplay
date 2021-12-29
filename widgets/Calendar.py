@@ -41,13 +41,6 @@ class Calendar:
         self.spacing = int(self.margin * 1.5)
         self.vertPos = 0
 
-        # Load icons
-        #icon_list = ['regular/calendar', 'regular/calendar-times']
-
-        #self.icons = {}
-        #for icon in icon_list:
-        #    self.icons[icon] = fa.load_icon(icon, self.fontSize - 2)
-
         # Choose and load calendar provider
         provider = cfg.get(wName, 'provider', fallback = None)
         if provider == 'Google':
