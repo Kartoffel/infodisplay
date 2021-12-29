@@ -1,0 +1,5 @@
+config.ini
+credentials.json
+token.json
+
+fa/**/*.svg

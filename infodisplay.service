@@ -1,0 +1,21 @@
+[Unit]
+Description=E-paper infodisplay
+# Service is started after NTP time sync
+# systemd-time-wait-sync needs to be enabled!
+# `sudo systemctl enable systemd-time-wait-sync`
+Wants=time-sync.target
+After=time-sync.target
+# Alternatively: After=network.target
+
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=120s
+ExecStart=/usr/bin/env python3 /home/pi/infodisplay/run.py
+WorkingDirectory=/home/pi/infodisplay
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target

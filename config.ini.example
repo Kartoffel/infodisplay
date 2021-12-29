@@ -1,0 +1,101 @@
+[main]
+# Service specific
+ # Do not print anything except warnings and errors
+quiet = no
+ # Print debug level messages (takes precedence over quiet)
+debug = yes
+
+# Display specific
+vcom = -2.08
+ # None / CW / CCW / flip
+rotate = None
+spi_hz = 24000000
+
+# Layout
+rows = 6
+cols = 8
+
+# Draw horizontal or vertical lines along edges of the widgets
+# uses borderWidth, borderCol
+lines = yes
+lines_hor = # FORMAT: row, col[-col]
+    1, 0-2
+    1, 5-8
+    #4, 5-8
+    #2, 0-8
+lines_vert = # FORMAT: col, row[-row]
+    2, 0
+    5, 0-6
+
+# Draw borders around every widget
+borders = no
+borderWidth = 4
+            # 0 - 255 (blk - white)
+borderCol = 64
+
+# Background color (0 - 255)
+background = 255
+
+
+#### Widgets ####
+
+[Clock]
+enabled = yes
+ # Refresh interval in minutes
+refreshInterval = 1
+ # Update every second with partial monochrome refreshes
+fastUpdate = yes
+ # Display (small) seconds next to time
+displaySeconds = yes
+flashColon = no
+ # row and col span
+row = 0
+col = 5-7
+ # invert colors
+invert = no
+textColor = 0
+fontSize = 84
+font = Roboto-Regular
+fontSecs = Roboto-Medium
+
+[Calendar]
+enabled = yes
+refreshInterval = 15
+row = 1-5
+col = 5-7
+invert = no
+
+font = Roboto-Regular
+titleSize = 34
+fontSize = 22
+# Display appointments up to this many days ahead
+daysAhead = 3
+# Maximum number of text lines per calendar item
+maxLines = 3
+
+# Configure calendar provider (currently: Demo / Google)
+provider = Demo
+
+# For Google calendar:
+googleCalendars =
+    # Get calendar id's together with token.json by running get-google-calendars on your local computer
+    primary
+    # More calendar id's here
+
+
+[Dummy]
+enabled = yes
+ # Refresh interval in minutes
+refreshInterval = 1
+ # row and col span
+ # syntax: 'a' or 'a-b' for multi-col/multi-row
+ # row/col nums start at 0
+row = 0
+col = 0-1
+ # invert colors
+invert = no
+
+
+
+
+
