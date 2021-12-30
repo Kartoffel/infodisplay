@@ -10,7 +10,7 @@ import logging
 from threading import Lock
 from io import BytesIO
 from cairosvg import svg2png
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 logging.getLogger('PIL.PngImagePlugin').setLevel(logging.WARNING)
 
