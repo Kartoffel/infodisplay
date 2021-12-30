@@ -1,7 +1,6 @@
-![](/assets/sample.jpg)
-_My display, using a Raspberry Pi Zero W and Waveshare [6" e-paper hat](https://www.waveshare.com/wiki/6inch_e-Paper_HAT)_
-
 # infodisplay
+![](/assets/sample.jpg)
+_My display, using a Raspberry Pi Zero W and Waveshare [6" e-paper hat](https://www.waveshare.com/wiki/6inch_e-Paper_HAT)._
 
 Modular information display framework aimed at e-ink devices.
 
@@ -10,16 +9,17 @@ Built using Python 3.7 and [pillow](https://pillow.readthedocs.io/en/stable/). W
 ## Setting up
 
 - When using an e-paper display with IT8951 controller, install GregDMeyer's [IT8951](https://github.com/GregDMeyer/IT8951) library following the instructions there.
-- Clone this repository and `cd` to its folder
+- Clone this repository and `cd` to its folder.
 - Install the basic required packages using `pip`:
 ```bash
 pip3 install -r requirements.txt
 ```
-- (If you plan to use the google calendar integration, or a widget with plots) install the optional packages:
+- Install the optional packages:
+- (If you plan to use the google calendar integration, or a widget with plots)
 ```bash
 pip3 install -r optional-requirements.txt
 ```
-_[Note for Raspberry Pi users](https://numpy.org/devdocs/user/troubleshooting-importerror.html#raspberry-pi): you may have to install numpy and matplotlib from the raspbian package manager._
+_Note for Raspberry Pi users: you [may have to](https://numpy.org/devdocs/user/troubleshooting-importerror.html#raspberry-pi) install numpy and matplotlib from the raspbian package manager._
 - Copy the example config file:
 ```bash
 cp config.ini.example config.ini
@@ -29,7 +29,7 @@ cp config.ini.example config.ini
 You should now be able to run the info display using something like `python3 run.py`.
 
 ### FontAwesome icons
-The class in [fontawesome.py](widgets/fontawesome.py) lets you use [FontAwesome](https://fontawesome.com/) icons. These are used in the Calendar widget by default. 
+The class in [fontawesome.py](helpers/fontawesome.py) lets you use [FontAwesome](https://fontawesome.com/) icons. These are used in the Calendar widget by default. 
 
 To see the icons, download a set of FontAwesome svg's (e.g. from [here](https://fontawesome.com/v5.15/how-to-use/on-the-desktop/setup/getting-started)) and unzip the `regular`, `solid`, and `brands` folders into the `fa/` folder:
 ```bash
@@ -66,7 +66,7 @@ sudo systemctl start infodisplay.service
 
 ### Google Calendar integration
 To get events from your Google Calendar you need a Google Cloud Platform project, OAuth credentials and finally a token.
-Follow the 'Prerequisites' section of this [tutorial](https://developers.google.com/calendar/api/quickstart/python) and you should have a `credentials.json` file at the end.
+Follow the 'Prerequisites' section of [this tutorial](https://developers.google.com/calendar/api/quickstart/python) and you should have a `credentials.json` file at the end.
 
 The following needs to be done **on your desktop computer**, as a dialog will pop up for authorization:
 - Clone this repo.
