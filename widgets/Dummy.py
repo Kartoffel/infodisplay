@@ -22,7 +22,10 @@ class Dummy:
 
         self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
         self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert = cfg.getboolean(wName, 'invert', fallback = False)
+        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+
+        # Global parameters
+        self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
 
         # Widget-specific parameters
         self.dummyParam = int(cfg.get(wName, 'dummyParam', fallback = 42))

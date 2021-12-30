@@ -27,19 +27,24 @@ class Calendar:
 
         self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
         self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert = cfg.getboolean(wName, 'invert', fallback = False)
+        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+
+        # Global parameters
+        self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
 
         # Widget-specific parameters
-        self.margin = int(cfg.get(wName, 'margin', fallback = 6))
-        self.fontSize = int(cfg.get(wName, 'fontSize', fallback = 22))
-        self.titleSize = int(cfg.get(wName, 'titleSize', fallback = 36))
-        self.font = cfg.get(wName, 'font', fallback = 'Roboto-Regular')
+        self.fontSize   = int(cfg.get(wName, 'fontSize', fallback = 22))
+        self.titleSize  = int(cfg.get(wName, 'titleSize', fallback = 36))
+        self.font       = cfg.get(wName, 'font', fallback = 'Roboto-Regular')
 
-        self.dateFmt = cfg.get(wName, 'dateFmt', fallback = '%A %d %b')
+        self.dateFmt    = cfg.get(wName, 'dateFmt', fallback = '%A %d %b')
 
-        self.textWidth = self.width - 2 * self.margin
-        self.spacing = int(self.margin * 1.5)
-        self.vertPos = 0
+        self.days_ahead = int(cfg.get(wName, 'daysAhead', fallback = 3))
+        self.max_lines  = int(cfg.get(wName, 'maxLines', fallback = 3))
+
+        self.textWidth  = self.width - 2 * self.margin
+        self.spacing    = 8 #int(self.margin * 1.5)
+        self.vertPos    = 0
 
         # Choose and load calendar provider
         provider = cfg.get(wName, 'provider', fallback = None)
@@ -51,9 +56,6 @@ class Calendar:
             self.provider = Demo(cfg)
         else:
             self.provider = None
-
-        self.days_ahead = int(cfg.get(wName, 'daysAhead', fallback = 3))
-        self.max_lines = int(cfg.get(wName, 'maxLines', fallback = 3))
 
         # Define canvas
         self.canvas = Image.new('L', (self.width, self.height), 0xFF)
