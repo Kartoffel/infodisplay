@@ -15,10 +15,11 @@ Built using Python 3.7 and [pillow](https://pillow.readthedocs.io/en/stable/). W
 ```bash
 pip3 install -r requirements.txt
 ```
-- (If you plan to use the google calendar integration) install the optional packages:
+- (If you plan to use the google calendar integration, or a widget with plots) install the optional packages:
 ```bash
 pip3 install -r optional-requirements.txt
 ```
+_[Note for Raspberry Pi users](https://numpy.org/devdocs/user/troubleshooting-importerror.html#raspberry-pi): you may have to install numpy and matplotlib from the raspbian package manager._
 - Copy the example config file:
 ```bash
 cp config.ini.example config.ini
