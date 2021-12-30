@@ -13,7 +13,7 @@ from time import sleep, perf_counter
 from PIL import Image, ImageOps, ImageDraw
 from display import Display
 from scheduler import Scheduler, Metronome
-from testfun import runWidget
+from helpers.testfun import runWidget
 
 display = None
 canvas = None

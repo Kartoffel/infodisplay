@@ -3,7 +3,7 @@
 '''
 import logging
 from PIL import Image
-from widgets.textfun import Text
+from helpers.textfun import Text
 
 wName = 'Dummy'
 

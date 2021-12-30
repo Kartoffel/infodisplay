@@ -9,7 +9,7 @@ from threading import Thread, Lock
 from multiprocessing.pool import ThreadPool, TimeoutError
 from datetime import datetime, timedelta
 from importlib import import_module
-from imagefun import ImageFun
+from helpers.imagefun import ImageFun
 
 class Metronome:
     '''

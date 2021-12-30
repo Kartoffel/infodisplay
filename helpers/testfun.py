@@ -13,7 +13,7 @@ def runWidget(config, display, canvas, name):
         print('Canvas not initialised!')
         return
 
-    from imagefun import ImageFun
+    from helpers.imagefun import ImageFun
     from threading import Lock
     from datetime import datetime, timedelta
     from importlib import import_module

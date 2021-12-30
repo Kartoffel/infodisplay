@@ -6,8 +6,8 @@
 
 import logging
 from PIL import Image
-from widgets.textfun import Text
-from widgets.fontawesome import FontAwesome
+from helpers.textfun import Text
+from helpers.fontawesome import FontAwesome
 from datetime import date, datetime, timedelta
 
 wName = 'Calendar'     
