@@ -21,6 +21,7 @@ lines = yes
 lines_hor = # FORMAT: row, col[-col]
     1, 0-2
     1, 5-8
+    4, 0-5
     #4, 5-8
     #2, 0-8
 lines_vert = # FORMAT: col, row[-row]
@@ -42,6 +43,18 @@ background = 255
 widgetMargin = 8
 
 #### Widgets ####
+
+[Dummy]
+enabled = yes
+ # Refresh interval in minutes
+refreshInterval = 1
+ # row and col span
+ # syntax: 'a' or 'a-b' for multi-col/multi-row
+ # row/col nums start at 0
+row = 0
+col = 0-1
+ # invert colors
+invert = no
 
 [Clock]
 enabled = yes
@@ -86,19 +99,17 @@ googleCalendars =
     primary
     # More calendar id's here
 
-
-[Dummy]
+[Rain]
 enabled = yes
- # Refresh interval in minutes
-refreshInterval = 1
- # row and col span
- # syntax: 'a' or 'a-b' for multi-col/multi-row
- # row/col nums start at 0
-row = 0
-col = 0-1
- # invert colors
+refreshInterval = 10
+row = 4-5
+col = 0-4
 invert = no
 
+fontSize = 20
+ # Latitude / Longitude
+lat = 52.093
+lon = 5.104
 
 
 
