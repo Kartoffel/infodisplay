@@ -49,8 +49,9 @@ class Plot:
         return np.log10(np.asarray(num) + 1) / logBase
 
     def rain(self, canvas, 
-        width, height, times, precip, pos = (0,0), fontsize = None, xlabel='',
-        ylabel='', title='', noRainMsg = '', levels = None, debug = False):
+        width, height, times, precip, pos = (0,0), font = '',
+        fontsize = None, xlabel='', ylabel='', title='', noRainMsg = '',
+        levels = None, debug = False):
         '''
             Plot function for 'Rain' widget
         '''
@@ -66,6 +67,10 @@ class Plot:
 
         with Plot._lock:
             # Set global figure parameters
+            if font:
+                plt.rcParams['font.family'] = 'sans-serif'
+                plt.rcParams['font.sans-serif'] = [font]
+                plt.rcParams['font.weight'] = 'normal'
             plt.rcParams['font.size'] = fontsize
 
             COLOR = 'k'

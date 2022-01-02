@@ -22,12 +22,12 @@ class Clock:
         self.invert = cfg.getboolean(wName, 'invert', fallback = False)
 
         # Parameters used by function
-        self.textcolor = int(cfg.get(wName, 'textColor', fallback = 0))
-        self.seconds = cfg.getboolean(wName, 'displaySeconds', fallback = True)
+        self.textcolor  = int(cfg.get(wName, 'textColor', fallback = 0))
+        self.seconds    = cfg.getboolean(wName, 'displaySeconds', fallback = True)
         self.flashColon = cfg.getboolean(wName, 'flashColon', fallback = False)
 
-        font = cfg.get(wName, 'font', fallback = 'Roboto-Regular')
-        font2 = cfg.get(wName, 'fontSecs', fallback = font)
+        font    = cfg.get('main', 'font', fallback = 'Roboto-Regular')
+        font2   = cfg.get(wName, 'fontSecs', fallback = font)
 
         self.hhmm_size  = int(cfg.get(wName, 'fontSize', fallback = 24))
         self.ss_size    = self.hhmm_size // 2

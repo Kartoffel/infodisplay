@@ -26,6 +26,7 @@ class Dummy:
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
+        self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
         self.dummyParam = int(cfg.get(wName, 'dummyParam', fallback = 42))
@@ -54,12 +55,18 @@ class Dummy:
         secs    = datetime.second
 
         # Drawing functions go here
-        self.text.centered(self.canvas, 'Dummy', fontsize = 40, offset=(0, -20))
+        self.text.centered(self.canvas,
+            'Dummy',
+            font = self.font,
+            fontsize = 40, 
+            offset = (0, -20)
+        )
 
         self.text.centered(self.canvas,
-            '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, mins, secs), 
+            '{:0>2d}:{:0>2d}:{:0>2d}'.format(hours, mins, secs),
+            font = self.font,
             fontsize = 24, 
-            offset=(0, 20)
+            offset = (0, 20)
         )
 
         # Leave this in! Widgets should always return themselves when finished drawing

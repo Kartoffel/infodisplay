@@ -31,11 +31,11 @@ class Calendar:
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
+        self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
         self.fontSize   = int(cfg.get(wName, 'fontSize', fallback = 22))
         self.titleSize  = int(cfg.get(wName, 'titleSize', fallback = 36))
-        self.font       = cfg.get(wName, 'font', fallback = 'Roboto-Regular')
 
         self.dateFmt    = cfg.get(wName, 'dateFmt', fallback = '%A %d %b')
 

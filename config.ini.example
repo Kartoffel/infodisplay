@@ -41,6 +41,8 @@ background = 255
 
  # Margin (widgets decide whether to apply this or not)
 widgetMargin = 8
+ # Global font family
+font = Roboto-Regular
 
 #### Widgets ####
 
@@ -72,7 +74,7 @@ col = 5-7
 invert = no
 textColor = 0
 fontSize = 84
-font = Roboto-Regular
+ # font family for seconds
 fontSecs = Roboto-Medium
 
 [Calendar]
@@ -82,7 +84,6 @@ row = 1-5
 col = 5-7
 invert = no
 
-font = Roboto-Regular
 titleSize = 34
 fontSize = 22
  # Display appointments up to this many days ahead
