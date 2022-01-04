@@ -4,7 +4,7 @@
 '''
 import logging
 import requests
-from PIL import Image, ImageDraw
+from PIL import Image
 from helpers.plot import Plot
 from helpers.textfun import Text
 from datetime import date, datetime, timedelta, timezone
