@@ -22,7 +22,7 @@ class FontAwesome:
         self.logger = logging.getLogger(__name__)
         self._default_size = 18
 
-    def _get_icon(self, icon, size = None):
+    def get_icon(self, icon, size = None):
         if size == None:
             size = self._default_size
 
@@ -70,7 +70,7 @@ class FontAwesome:
 
     def paste_icon(self, canvas, name, size = None, pos = (0,0)):
 
-        icon = self._get_icon(name, size)
+        icon = self.get_icon(name, size)
 
         if icon:
             box = (
