@@ -12,21 +12,19 @@ rotate = None
 spi_hz = 24000000
 
 ## Layout
-rows = 6
+rows = 12
 cols = 8
 
  # Draw horizontal or vertical lines along edges of the widgets
  # uses borderWidth, borderCol
 lines = yes
 lines_hor = # FORMAT: row, col[-col]
-    1, 0-2
-    1, 5-8
-    4, 0-5
-    #4, 5-8
-    #2, 0-8
+    2, 0-2
+    2, 2-5
+    2, 5-8
+    9, 0-5
 lines_vert = # FORMAT: col, row[-row]
-    2, 0
-    5, 0-6
+    5, 0-12
 
  # Draw borders around every widget
 borders = no
@@ -53,7 +51,7 @@ refreshInterval = 1
  # row and col span
  # syntax: 'a' or 'a-b' for multi-col/multi-row
  # row/col nums start at 0
-row = 0
+row = 0-1
 col = 0-1
  # invert colors
 invert = no
@@ -68,7 +66,7 @@ fastUpdate = yes
 displaySeconds = yes
 flashColon = no
  # row and col span
-row = 0
+row = 0-1
 col = 5-7
  # invert colors
 invert = no
@@ -80,7 +78,7 @@ fontSecs = Roboto-Medium
 [Calendar]
 enabled = yes
 refreshInterval = 15
-row = 1-5
+row = 2-11
 col = 5-7
 invert = no
 
@@ -103,7 +101,7 @@ googleCalendars =
 [Rain]
 enabled = yes
 refreshInterval = 10
-row = 4-5
+row = 9-11
 col = 0-4
 invert = no
 
@@ -112,6 +110,22 @@ fontSize = 20
 lat = 52.093
 lon = 5.104
 
+[Weather]
+enabled = yes
+refreshInterval = 30
+row = 2-8
+col = 0-4
+invert = no
 
+ # Width of lines between elements
+lineWidth = 1
+ # Line color
+lineCol = 64
+ # Last part of URL, after 'https://www.weerplaza.nl/'
+locationID=nederland/eindhoven/9020/
+ # Display this many hours ahead (max. 48)
+hours = 6
+ # Display this many days ahead (max. 7)
+days = 3
 
 
