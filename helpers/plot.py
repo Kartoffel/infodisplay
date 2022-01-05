@@ -139,9 +139,6 @@ class Plot:
             if max(precip) > levels['heavy']:
                 # Plot light and heavy line
                 levels_plot += ['heavy']
-            elif max(precip) > levels['moderate']:
-                # Plot light, moderate, heavy
-                levels_plot += ['moderate', 'heavy']
             else:
                 # Plot light and moderate line
                 levels_plot += ['moderate']
