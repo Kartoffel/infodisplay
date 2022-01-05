@@ -211,6 +211,7 @@ class Plot:
                 path_effects.Normal()]) # White stroke behind text
 
             img = self._fig_to_img(fig)
+            plt.close(fig)
 
         box = (
             pos[0], pos[1],
@@ -259,6 +260,7 @@ class Plot:
                 ax.legend()
 
             img = self._fig_to_img(fig)
+            plt.close(fig)
 
         box = (
             pos[0], pos[1],

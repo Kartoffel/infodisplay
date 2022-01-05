@@ -1,6 +1,11 @@
+# For google calendar integration in Calendar widget
 google-api-python-client
 google-auth-httplib2 
 google-auth-oauthlib
+# For Rain widget (and others using helper/plot.py
 numpy
 matplotlib
 scipy
+# For Weather widget
+lxml
+cssselect
