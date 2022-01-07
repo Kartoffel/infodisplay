@@ -503,23 +503,20 @@ class Weather:
         try:
             now = self._parse_now(root)
         except Exception as e:
-            self.logger.error("Error parsing current weather")
-            self.logger.error(e)
+            self.logger.error("Error parsing current weather", exc_info=True)
             now = None
 
         try:
             forecast_48h = self._parse_48h(root)
         except Exception as e:
-            self.logger.error("Error parsing 48h forecast")
-            self.logger.error(e)
-            forecast_48h = []
+            self.logger.error("Error parsing 48h forecast", exc_info=True)
+            forecast_48h = None
 
         try:
             forecast_7d = self._parse_7d(root)
         except Exception as e:
-            self.logger.error("Error parsing 7d forecast")
-            self.logger.error(e)
-            forecast_7d = []
+            self.logger.error("Error parsing 7d forecast", exc_info=True)
+            forecast_7d = None
 
         weather = {
             "now": now,
@@ -531,17 +528,13 @@ class Weather:
 
         return weather if success else None
 
-
-
-    def _draw_forecast(self, weather):
-
-        draw = ImageDraw.Draw(self.canvas)
-
-        ### First row: current weather ###
+    def _draw_row1(self, weather, y_pos, height, draw, vert_spacing_mini):
+        '''
+            First row: current weather ###
+        '''
         now = weather["now"]
         hor_pos = self.margin
-        vert_pos = self.margin * 2
-        height = self.row_heights[0]
+        vert_pos = y_pos
 
         # Weather icon
         icon = self._icon_to_fontawesome(now['id'])
@@ -572,8 +565,6 @@ class Weather:
 
         width_remain = self.width - table_start - self.margin
 
-        # Vertical spacing between elements
-        vert_spacing_mini = 4
         row_height = (height - 2 * vert_spacing_mini) // 3
 
         # Minitable row 1/3: wind chill, [wind] wind
@@ -679,24 +670,21 @@ class Weather:
         )
 
 
-        ### Second row: hourly forecast ###
-
+    def _draw_row2(self, weather, y_pos, height, draw, vert_spacing_mini):
+        '''
+            Second row: hourly forecast
+        '''
         forecast_48h = weather["48h"]
 
-        vert_pos = self.margin * 2 + self.row_heights[0] + self.vert_spacing
+        vert_pos = y_pos
         hor_pos = self.margin
-        height = self.row_heights[1]
 
-        # Vertical spacing between elements
-        vert_spacing_mini = 4
-        icon_size = 24
+        icon_size = height // 4 - 4
 
         # Height of text elements
         element_height = (height - (vert_spacing_mini * 4 + icon_size)) // 4
 
-        num_hours = len(forecast_48h)
-        if num_hours > 0:
-            hour_width = (self.width - 2 * self.margin) // num_hours
+        hour_width = (self.width - 2 * self.margin) // len(forecast_48h)
 
         # Vertical: time, icon, temperature, precip, wind
         for hour in forecast_48h:
@@ -766,18 +754,15 @@ class Weather:
                     fill = self.lineCol
                 )
 
+    def _draw_row3(self, weather, y_pos, height, draw, vert_spacing_mini):
+        '''
+            Third row: daily forecast
+        '''
         forecast_7d = weather["7d"]
 
-        vert_pos = (self.margin * 2 + self.row_heights[0] +
-            self.row_heights[1] + 2 * self.vert_spacing)
-        height = self.row_heights[2]
+        vert_pos = y_pos
 
-        # Vertical spacing between elements
-        vert_spacing_mini = 4
-
-        num_days = len(forecast_7d)
-        if num_days > 0:
-            day_height = height // num_days
+        day_height = height // len(forecast_7d)
 
         icon_size = day_height - 2 * vert_spacing_mini - 2
         text_size = icon_size - 4
@@ -886,7 +871,30 @@ class Weather:
                     fill = self.lineCol
                 )
 
+    def _draw_forecast(self, weather):
+        '''
+            Draw weather forecast, comprising of three rows
+            Row 1: Current weather
+            Row 2: Hourly forecast
+            Row 3: Daily forecast
+        '''
+        # Get ImageDraw object
+        draw = ImageDraw.Draw(self.canvas)
 
+        # Vertical spacing between elements
+        vert_spacing_mini = 4
+
+        y_pos = 3 * self.margin // 2
+        self._draw_row1(weather, y_pos, self.row_heights[0], draw,
+            vert_spacing_mini)
+
+        y_pos += self.row_heights[0] + self.vert_spacing
+        self._draw_row2(weather, y_pos, self.row_heights[1], draw,
+            vert_spacing_mini)
+
+        y_pos += self.row_heights[1] + self.vert_spacing
+        self._draw_row3(weather, y_pos, self.row_heights[2], draw,
+            vert_spacing_mini)
 
     def draw(self, **kwargs):
 
