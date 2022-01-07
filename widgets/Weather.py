@@ -74,7 +74,6 @@ class Weather:
         self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
-        self.fontSize   = int(cfg.get(wName, 'fontSize', fallback = 22))
         self.lineWidth  = int(cfg.get(wName, 'lineWidth', fallback = 1))
         self.lineCol    = int(cfg.get(wName, 'lineCol', fallback = 0))
         self.locationID = cfg.get(wName, 'locationID',
@@ -513,21 +512,24 @@ class Weather:
         except Exception as e:
             self.logger.error("Error parsing 48h forecast")
             self.logger.error(e)
-            forecast_48h = None
+            forecast_48h = []
 
         try:
             forecast_7d = self._parse_7d(root)
         except Exception as e:
             self.logger.error("Error parsing 7d forecast")
             self.logger.error(e)
-            forecast_7d = None
+            forecast_7d = []
 
         weather = {
             "now": now,
             "48h": forecast_48h,
             "7d":  forecast_7d
         }
-        return weather
+
+        success = not any([val == None for val in weather.values()])
+
+        return weather if success else None
 
 
 
@@ -893,14 +895,15 @@ class Weather:
         text = self._get_page()
 
         if not text:
-            return self
-
-        # Clear canvas
-        self.canvas.paste(0xFF, box=(0, 0, self.width, self.height))
+            return self        
 
         weather = self._parse_page(text)
 
-        self._draw_forecast(weather)
+        if weather:
+            # Clear canvas
+            self.canvas.paste(0xFF, box=(0, 0, self.width, self.height))
+
+            self._draw_forecast(weather)
 
         return self
 
