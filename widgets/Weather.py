@@ -316,7 +316,7 @@ class Weather:
         for i in range(len(hourly)):
             td = row[i]
 
-            tempText = td.cssselect("div.red.temp")[0].text
+            tempText = td.cssselect(".temp")[0].text
             tempRegex = re.search("(-?\d+) *°C", tempText)
 
             if tempRegex:
@@ -911,7 +911,11 @@ class Weather:
             # Clear canvas
             self.canvas.paste(0xFF, box=(0, 0, self.width, self.height))
 
-            self._draw_forecast(weather)
+            try:
+                self._draw_forecast(weather)
+            except:
+                self.logger.error("Error drawing forecast", exc_info=True)
+
 
         return self
 
@@ -953,7 +957,11 @@ class Weather:
         '''
             Format precipitation as .1f, remove trailing zeros
         '''
-        float_string = '{:.1f}'.format(precip)
+        try:
+            float_string = '{:.1f}'.format(precip)
+        except TypeError:
+            return ""
+
         if float_string[-2:] == '.0':
             return float_string[:-2]
         else:
