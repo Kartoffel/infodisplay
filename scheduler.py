@@ -331,7 +331,7 @@ class Scheduler:
         # Paste updated fast widgets onto canvas
         self.pasteFastWidgets()
 
-        # Redraw fast widgets immediately for next second
+        # Start redrawing fast widgets immediately for next second
         timeNext = now + timedelta(seconds = 1)
         self.redrawFastWidgets(timeNext)
 
@@ -342,9 +342,13 @@ class Scheduler:
             # Copy canvas to display buffer
             self.display.updateBuf(self.canvas)
 
-            # TODO: refresh with `partial = False, flash = True` every hour or so to remove ghosting?
-            # Does not seem necessary for IT8951, no ghosting when only using partial updates
-            self.display.refresh(greyscale = True, partial = True, flash = False)
+            # Refresh with `partial = False, flash = True` every hour or to remove ghosting
+            if now.minute == 0:
+                self.display.refresh(greyscale = True, 
+                    partial = False, flash = True)
+            else:
+                self.display.refresh(greyscale = True,
+                    partial = True, flash = False)
 
             # Schedule redraw of regular widgets
 
