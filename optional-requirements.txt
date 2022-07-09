@@ -9,3 +9,5 @@ scipy
 # For Weather widget
 lxml
 cssselect
+# For MQTT widget
+paho-mqtt

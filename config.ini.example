@@ -130,4 +130,27 @@ skipHour = 2
  # Display this many days ahead (max. 7)
 days = 3
 
+[MQTT]
+enabled = no
+ # Refresh interval in minutes
+refreshInterval = 1
+ # row and col span
+ # syntax: 'a' or 'a-b' for multi-col/multi-row
+ # row/col nums start at 0
+row = 0-1
+col = 0-4
+ # invert colors
+invert = no
+titleSize = 24
+fontSize = 36
+ # MQTT host
+server = hackalot.nl
+port = 1883
+ # Elements to display
+ # format: Title, MQTT topic, float decimals (or 'raw'), unit (optional)
+elements = 
+    Indoor,hackalot/climate/temperature-HTU21D,1,°C
+    RH,hackalot/climate/RH-HTU21D,0,%%
+    CO2,hackalot/climate/operame,0, ppm
+    Spacestate,hackalot/state,raw
 
