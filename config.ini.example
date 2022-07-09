@@ -15,7 +15,7 @@ spi_hz = 24000000
 rows = 12
 cols = 8
 
- # Draw horizontal or vertical lines along edges of the widgets
+ # Draw horizontal or vertical lines along edges of rows and columns
  # uses borderWidth, borderCol
 lines = yes
 lines_hor = # FORMAT: row, col[-col]
