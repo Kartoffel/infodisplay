@@ -125,6 +125,8 @@ lineCol = 64
 locationID=nederland/eindhoven/9020/
  # Display this many hours ahead (max. 48)
 hours = 6
+ # Show every n hours (1 = show all, 2 = skip every other hour, ...)
+skipHour = 2
  # Display this many days ahead (max. 7)
 days = 3
 

@@ -79,6 +79,7 @@ class Weather:
         self.locationID = cfg.get(wName, 'locationID',
             fallback = 'nederland/eindhoven/9020/')
         self.numHours   = int(cfg.get(wName, 'hours', fallback = 48))
+        self.skipHour   = int(cfg.get(wName, 'skipHour', fallback = 1))
         self.numDays    = int(cfg.get(wName, 'days', fallback = 7))
 
         self.timeout      = 16
@@ -250,9 +251,15 @@ class Weather:
         table = div[0]
         tbody = table.getchildren()[0]
 
+        # Hours to keep
+        idxHours = range(0, self.numHours * self.skipHour, self.skipHour)
+
         # First row: datetimes and weather icon ID
         row = tbody.getchildren()[0]
-        for td in row.getchildren():
+        for idx, td in enumerate(row.getchildren()):
+            if idx not in idxHours:
+                continue
+
             if len(hourly) >= self.numHours:
                 break
 
@@ -314,7 +321,7 @@ class Weather:
         # Second row: max temperature
         row = tbody.getchildren()[1]
         for i in range(len(hourly)):
-            td = row[i]
+            td = row[i*self.skipHour]
 
             tempText = td.cssselect(".temp")[0].text
             tempRegex = re.search("(-?\d+) *°C", tempText)
@@ -327,7 +334,7 @@ class Weather:
         # Graph part is two columns, only select first one which has tooltip
         col1 = row.cssselect(".graph-col1")
         for i in range(len(hourly)):
-            td = col1[i]
+            td = col1[i*self.skipHour]
 
             tooltip = td.cssselect(".tooltip")[0]
             chillText = tooltip.getchildren()[0].cssselect("span")[0].text
@@ -339,7 +346,7 @@ class Weather:
         # Fourth row: precipitation
         row = tbody.getchildren()[3]
         for i in range(len(hourly)):
-            td = row[i]
+            td = row[i*self.skipHour]
 
             rainAmount = td.getchildren()[0].text
             rainRegex = re.search("(\d+[,.]\d+|\d+)", rainAmount)
@@ -352,7 +359,7 @@ class Weather:
         # Sixth row: wind direction and speed
         row = tbody.getchildren()[5]
         for i in range(len(hourly)):
-            td = row[i]
+            td = row[i*self.skipHour]
 
             windDescription = td.getchildren()[0].text
             windRegex = re.search("([A-Z]+) (\d+)", windDescription)
@@ -915,7 +922,6 @@ class Weather:
                 self._draw_forecast(weather)
             except:
                 self.logger.error("Error drawing forecast", exc_info=True)
-
 
         return self
 
