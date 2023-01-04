@@ -9,6 +9,7 @@ Built using Python 3.7 and [pillow](https://pillow.readthedocs.io/en/stable/). W
 ## Setting up
 
 - When using an e-paper display with IT8951 controller, install GregDMeyer's [IT8951](https://github.com/GregDMeyer/IT8951) library following the instructions there.
+- Install the Roboto font family (`fonts-roboto` from the package manager) to make text look nice.
 - Clone this repository and `cd` to its folder.
 - Install the basic required packages using `pip`:
 ```bash
