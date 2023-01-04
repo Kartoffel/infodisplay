@@ -244,27 +244,24 @@ class Weather:
         hourly = []
 
         # Get div with 48 hour prediction
-        div = root.cssselect(".forecast-hourly .content table")
+        div = root.cssselect(".forecast-hourly .content section")
         if not div:
             return hourly
 
-        table = div[0]
-        tbody = table.getchildren()[0]
+        section = div[0]
 
         # Hours to keep
         idxHours = range(0, self.numHours * self.skipHour, self.skipHour)
 
-        # First row: datetimes and weather icon ID
-        row = tbody.getchildren()[0]
-        for idx, td in enumerate(row.getchildren()):
+        for idx, hourDiv in enumerate(section.getchildren()):
             if idx not in idxHours:
                 continue
 
             if len(hourly) >= self.numHours:
                 break
 
-            # Set up format
-            hourly.append({
+            # Setup empty template
+            d = {
                 "datetime": None,       # Datetime object
                 "date": None,           # Formatted date [Y-m-d]
                 "time": None,           # Formatted time [H:M]
@@ -280,14 +277,16 @@ class Weather:
                     "direction": None,  # Cardinal direction
                     "speed": None       # Wind speed (Bft)
                 }
-            })
+            }
 
-            d = hourly[-1]
+            # First div: datetimes and weather icon ID
+            summaryDiv = hourDiv.cssselect(".summary-row")[0]
 
             # Weekday and time
-            day     = td.getchildren()[0].getchildren()[0].text.strip()
-            time    = td.getchildren()[0].getchildren()[1].text.split(":")
-
+            headDiv = summaryDiv.cssselect(".head")[0]
+            day     = headDiv.getchildren()[0].text.strip()
+            time    = headDiv.getchildren()[1].text.split(":")
+            
             dayIndex= self._weekdays.index(day)
             now     = self.dt
 
@@ -308,66 +307,60 @@ class Weather:
             d["datetime"] = destDay
             d["date"] = destDay.strftime("%Y-%m-%d")
             d["time"] = destDay.strftime("%H:%M")
-
+            
             # Weather icon
-            weatherStyle = td.cssselect(".wx")[0].attrib["style"]
+            weatherStyle = summaryDiv.cssselect(".wx")[0].attrib["style"]
             weatherRegex = re.search(
                 "background-image: url\('.+\/(.+).svg'\)",
                 weatherStyle
             )
             if weatherRegex:
                 d["id"] = weatherRegex.group(1)
-
-        # Second row: max temperature
-        row = tbody.getchildren()[1]
-        for i in range(len(hourly)):
-            td = row[i*self.skipHour]
-
-            tempText = td.cssselect(".temp")[0].text
+            
+            # Second div: max temperature
+            temperatureDiv = hourDiv.cssselect(".temperature-row")[0]
+            tempText = temperatureDiv.cssselect(".temp")[0].text
             tempRegex = re.search("(-?\d+) *°C", tempText)
 
             if tempRegex:
-                hourly[i]["temperature"]["max"] = int(tempRegex.group(1))
-
-        # Third row: wind chill
-        row = tbody.getchildren()[2]
-        # Graph part is two columns, only select first one which has tooltip
-        col1 = row.cssselect(".graph-col1")
-        for i in range(len(hourly)):
-            td = col1[i*self.skipHour]
-
-            tooltip = td.cssselect(".tooltip")[0]
+                d["temperature"]["max"] = int(tempRegex.group(1))
+            
+            # Third div: wind chill
+            temperatureGraphDiv = hourDiv.cssselect(".temperature-graph")[0]
+            tooltip = temperatureGraphDiv.cssselect(".tooltip")[0]
             chillText = tooltip.getchildren()[0].cssselect("span")[0].text
 
             tempRegex = re.search("(-?\d+) *°C", chillText)
             if tempRegex:
-                hourly[i]["temperature"]["chill"] = int(tempRegex.group(1))
+                d["temperature"]["chill"] = int(tempRegex.group(1))
+            
+            # Fourth div: precipitation
+            precipDiv = hourDiv.cssselect(".precipitation-row")[0]
+            
+            # TODO: Handle snow (given in cm)
+            try:
+                rainAmount = precipDiv.cssselect(".precipitation-value")[0].getchildren()[0].text
+                rainRegex = re.search("(\d+[,.]\d+|\d+)", rainAmount)
 
-        # Fourth row: precipitation
-        row = tbody.getchildren()[3]
-        for i in range(len(hourly)):
-            td = row[i*self.skipHour]
-
-            rainAmount = td.getchildren()[0].text
-            rainRegex = re.search("(\d+[,.]\d+|\d+)", rainAmount)
-
-            if rainRegex:
-                hourly[i]["rain"]["amount"] = float(
-                    rainRegex.group(1).replace(',', '.')
-                )
-
-        # Sixth row: wind direction and speed
-        row = tbody.getchildren()[5]
-        for i in range(len(hourly)):
-            td = row[i*self.skipHour]
-
-            windDescription = td.getchildren()[0].text
+                if rainRegex:
+                    d["rain"]["amount"] = float(
+                        rainRegex.group(1).replace(',', '.')
+                    )
+            except IndexError:
+                pass
+            
+            # Sixth div: wind direction and speed
+            windDiv = hourDiv.cssselect(".wind-row")[0]
+            windDescription = windDiv.cssselect(".hide")[0].text
+            
             windRegex = re.search("([A-Z]+) (\d+)", windDescription)
 
             if windRegex:
-                hourly[i]["wind"]["direction"] = self._trns_wind_dir(
+                d["wind"]["direction"] = self._trns_wind_dir(
                     windRegex.group(1))
-                hourly[i]["wind"]["speed"] = int(windRegex.group(2))
+                d["wind"]["speed"] = int(windRegex.group(2))
+            
+            hourly.append(d)
 
         return hourly
 
