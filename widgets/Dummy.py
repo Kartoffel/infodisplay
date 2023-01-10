@@ -80,5 +80,3 @@ class Dummy:
         # Add code that runs before the display is shut down here (e.g. saving a state)
         self.logger.info('Cleaning up!')
         return
-
-

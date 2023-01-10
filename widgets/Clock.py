@@ -128,4 +128,3 @@ class Clock:
 
     def getCanvas(self):
         return self.canvas
-

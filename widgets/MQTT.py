@@ -141,5 +141,3 @@ class MQTT:
     def cleanup(self):
         self.mqttc.loop_stop()
         return
-
-

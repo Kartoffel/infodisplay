@@ -210,6 +210,3 @@ class Calendar:
 
     def getCanvas(self):
         return self.canvas
-
-
-

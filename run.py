@@ -100,5 +100,3 @@ if __name__ == '__main__':
     # Wait indefinitely for signals
     while True:
         signal.pause()
-
-

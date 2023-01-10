@@ -35,4 +35,3 @@ class Demo:
         '''
 
         return self.sample_list
-

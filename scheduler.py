@@ -367,8 +367,3 @@ class Scheduler:
 
             self.display.updateBuf(self.canvas)
             self.display.refresh(greyscale = False, partial = True, flash = False)
-
-            
-
-
-

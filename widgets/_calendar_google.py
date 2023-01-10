@@ -181,4 +181,3 @@ class Google:
         utc_time_ahead = time_ahead.astimezone(timezone.utc)
 
         return self._get_events(utc_time, utc_time_ahead)
-

@@ -119,6 +119,3 @@ def runWidget(config, display, canvas, name):
         widget.cleanup()
     except:
         pass
-
-
-
