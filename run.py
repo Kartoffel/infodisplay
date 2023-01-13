@@ -8,10 +8,10 @@ import sys
 import signal
 import configparser
 import logging
+import importlib
 from threading import Thread
 from time import sleep, perf_counter
 from PIL import Image, ImageOps, ImageDraw
-from display import Display
 from scheduler import Scheduler, Metronome
 from helpers.testfun import runWidget
 
@@ -42,7 +42,12 @@ def init():
         Open connection to display, create canvas
     '''
     global display, canvas
-    display = Display(config)
+    display_class = config.get('main', 'display_class')
+    if not display_class:
+        logger.error("missing 'display_class' in config file")
+        sys.exit(1)
+    mod = importlib.import_module(display_class)
+    display = mod.Display(config)
     display.clear()
 
     logger.info('Connected to display.')
