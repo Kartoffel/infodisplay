@@ -11,7 +11,7 @@ vcom = -2.08
  # None / CW / CCW / flip
 rotate = None
 spi_hz = 24000000
-# Display width / height
+ # Display width / height (only used for display_png display class)
 #width = 800
 #height = 600
 
