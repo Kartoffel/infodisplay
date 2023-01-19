@@ -264,5 +264,3 @@ class Plot:
             pos[0] + width, pos[1] + height
         )
         canvas.paste(img, box)
-
-

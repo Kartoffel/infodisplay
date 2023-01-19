@@ -1052,4 +1052,3 @@ class Weather:
 
         # Default
         return 'regular/question-circle'
-

@@ -122,4 +122,3 @@ class Text:
         hh = max(hh, fontsize)
 
         return (width, hh - pos[1])
-

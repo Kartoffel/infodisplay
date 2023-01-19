@@ -136,9 +136,3 @@ class ImageFun:
                 d.line([xy1, xy2], fill=self.borderCol, width=self.borderWidth)
                 self.circle(d, xy1, self.borderWidth // 2, self.borderCol)
                 self.circle(d, xy2, self.borderWidth // 2, self.borderCol)
-                
-
-
-
-
-

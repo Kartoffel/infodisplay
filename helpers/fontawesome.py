@@ -78,4 +78,3 @@ class FontAwesome:
                 pos[0] + icon.width, pos[1] + icon.height
             )
             canvas.paste(icon, box)
-

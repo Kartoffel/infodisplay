@@ -155,4 +155,3 @@ class Rain:
 
     def getCanvas(self):
         return self.canvas
-

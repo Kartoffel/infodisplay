@@ -91,7 +91,3 @@ class Display:
             self.display.draw_partial(LUT)
         else:
             self.display.draw_full(LUT)
-        
-        
-
-
