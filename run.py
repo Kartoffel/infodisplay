@@ -42,7 +42,7 @@ def init():
         Open connection to display, create canvas
     '''
     global display, canvas
-    display_class = config.get('main', 'display_class')
+    display_class = config.get('main', 'display_class', fallback = '')
     if not display_class:
         logger.error("missing 'display_class' in config file")
         sys.exit(1)
