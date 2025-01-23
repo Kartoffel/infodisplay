@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class Display:
     def __init__(self, cfg):
         self.logger = logging.getLogger(__name__)
-        self.filename = 'display.png'
+        self.filename = cfg.get('main', 'file', fallback='display.png')
         self.height = cfg.getint('main', 'height', fallback=600)
         self.width = cfg.getint('main', 'width', fallback=800)
         self.frame_buf = Image.new('L', (self.width, self.height), 0xFF)
