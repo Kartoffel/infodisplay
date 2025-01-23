@@ -62,14 +62,41 @@ class Text:
         return (width, height)
 
     def write(self, buffer, text, pos = (0,0), font = None,
-                fontsize = None, fill = None, anchor = 'la'):
+                fontsize = None, fill = None, anchor = 'la', max_width = 0):
         '''
             Useful reference for text anchors:
             https://pillow.readthedocs.io/en/stable/handbook/text-anchors.html#text-anchors
         '''
         draw = ImageDraw.Draw(buffer)
         dFont = self._get_font(font, fontsize)
-        draw.text(pos, text, font=dFont, fill=fill, anchor=anchor)
+        
+        if not max_width:        
+            draw.text(pos, text, font=dFont, fill=fill, anchor=anchor)
+            return
+        
+        w, _ = self.size(buffer, text, pos, font=font, fontsize=fontsize)
+        if w <= max_width:
+            draw.text(pos, text, font=dFont, fill=fill, anchor=anchor)
+            return
+        
+        line = ''
+        
+        for word in text.split():
+            tmp = ' '.join([line, word]) if line != '' else word
+            w, _ = self.size(buffer, tmp, pos, font=font, fontsize=fontsize)
+            
+            if w <= max_width:
+                line = tmp
+            else:
+                while w > max_width:
+                    word = word[:-1]
+                    tmp = ' '.join([line, word]) if line != '' else word
+                    w, _ = self.size(buffer, tmp, pos, font=font, fontsize=fontsize)
+                line = tmp[:-1] + '..'
+                break
+        draw.text(pos, line, font=dFont, fill=fill, anchor=anchor)
+            
+        
 
     def centered(self, buffer, text, offset = (0,0), font = None,
                     fontsize = None, fill = None, anchor = 'mm'):
@@ -78,7 +105,7 @@ class Text:
         self.write(buffer, text, pos, font, fontsize, fill, anchor)
 
     def textbox(self, buffer, text, width, pos = (0,0), max_lines = None,
-        font = None, fontsize = None, spacing = 0, **kwargs):
+        font = None, fontsize = None, fill = None, spacing = 0, **kwargs):
         '''
             Fill text into box with automatic line breaks, optional maximum height
             Returns (width, height) of final box
@@ -115,6 +142,7 @@ class Text:
                 pos = (pos[0], hh),
                 font = font,
                 fontsize = fontsize,
+                fill=fill,
                 **kwargs
             )
             hh += (fontsize + spacing)
