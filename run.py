@@ -9,6 +9,7 @@ import signal
 import configparser
 import logging
 import importlib
+import argparse
 from threading import Thread
 from time import sleep, perf_counter
 from PIL import Image, ImageOps, ImageDraw
@@ -18,10 +19,18 @@ from helpers.testfun import runWidget
 display = None
 canvas = None
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--config", nargs = '?', dest = "configFile",
+    help = "Name of config file to use", default = "config.ini")
+parser.add_argument("-t", "--test", nargs = '?', dest = "testWidget",
+    help = "Widget (name of config file section) to run once")
+
+args = parser.parse_args()
+
 config = configparser.ConfigParser()
 try:
-    if config.read('config.ini') == []:
-        print("Config file config.ini does not exist or is empty!")
+    if config.read(args.configFile) == []:
+        print(f"Config file {args.configFile} does not exist or is empty!")
         sys.exit(1)
 except Exception as e:
     print("Error reading config file: {}".format(e))
@@ -69,8 +78,8 @@ def signal_handler(sig, frame):
 if __name__ == '__main__':
     init()
 
-    if len(sys.argv) == 2:
-        runWidget(config, display, canvas, sys.argv[1])
+    if args.testWidget:
+        runWidget(config, display, canvas, args.testWidget)
         sys.exit(0)
 
     scheduler = Scheduler(config, display, canvas)
