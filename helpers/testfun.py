@@ -1,6 +1,7 @@
 '''
     Test / development functions
 '''
+import logging
 from time import sleep, perf_counter
 
 def runWidget(config, display, canvas, name):
@@ -13,10 +14,14 @@ def runWidget(config, display, canvas, name):
         print('Canvas not initialised!')
         return
 
+    import logging
     from helpers.imagefun import ImageFun
     from threading import Lock
     from datetime import datetime, timedelta
     from importlib import import_module
+
+    # Set global log level debug
+    logging.getLogger().setLevel(logging.DEBUG)
 
     # Get ImageFun functions
     lock = Lock()
