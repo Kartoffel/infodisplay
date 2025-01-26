@@ -5,14 +5,14 @@ import logging
 from PIL import Image
 from helpers.textfun import Text
 
-wName = 'Dummy'
-
 class Dummy:
-    def __init__(self, cfg, width, height, pos):
-        self.name   = __name__
+    def __init__(self, name, cfg, width, height, pos):
+        self.name   = name
         self.logger = logging.getLogger(self.name)
 
-        if wName not in cfg.sections():
+        self.logger.info('Hello!')
+
+        if self.name not in cfg.sections():
             self.logger.warning('No parameters in config file, using defaults.')
 
         # Below parameters not used by class itself but stored here
@@ -20,16 +20,16 @@ class Dummy:
         self.height = height
         self.pos    = pos
 
-        self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
-        self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+        self.refreshInterval = int(cfg.get(self.name, 'refreshInterval', fallback = 10))
+        self.fastUpdate = cfg.getboolean(self.name, 'fastUpdate', fallback = False)
+        self.invert     = cfg.getboolean(self.name, 'invert', fallback = False)
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
         self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
-        self.dummyParam = int(cfg.get(wName, 'dummyParam', fallback = 42))
+        self.dummyParam = int(cfg.get(self.name, 'dummyParam', fallback = 42))
 
         # Define canvas
         self.canvas = Image.new('L', (self.width, self.height), 0xFF)
@@ -56,7 +56,7 @@ class Dummy:
 
         # Drawing functions go here
         self.text.centered(self.canvas,
-            'Dummy',
+            self.name,
             font = self.font,
             fontsize = 40, 
             offset = (0, -20)

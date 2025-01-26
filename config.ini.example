@@ -60,6 +60,20 @@ col = 0-1
  # invert colors
 invert = no
 
+[Dummy2]
+# Example of creating another instance of the 'Dummy' widget
+# (numbers at the end of the section name are ignored)
+enabled = no
+ # Refresh interval in minutes
+refreshInterval = 1
+ # row and col span
+ # syntax: 'a' or 'a-b' for multi-col/multi-row
+ # row/col nums start at 0
+row = 0-1
+col = 2-3
+ # invert colors
+invert = no
+
 [Clock]
 enabled = yes
  # Refresh interval in minutes

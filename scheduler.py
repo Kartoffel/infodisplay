@@ -9,6 +9,7 @@ from threading import Thread, Lock
 from multiprocessing.pool import ThreadPool, TimeoutError
 from datetime import datetime, timedelta
 from importlib import import_module
+from string import digits
 from helpers.imagefun import ImageFun
 
 class Metronome:
@@ -31,6 +32,7 @@ class Metronome:
 
         self.thread = []
 
+        self.firstRun = True
         self.kill = False
 
         Metronome._instance = self
@@ -43,7 +45,7 @@ class Metronome:
         if self.interval % 60 == 0:
             # If interval is in round minutes, wait until start of next minute
             self.logger.debug('Waiting for next minute..')
-            while datetime.now().second != 0:
+            while datetime.now().second != 59:
                 time.sleep(0.01)
 
         while not self.kill:
@@ -51,7 +53,10 @@ class Metronome:
                 self.thread.join()
 
             # Sleep for interval minus one second first
-            time.sleep(self.interval - 1)
+            if not self.firstRun:
+                time.sleep(self.interval - 1)
+            else:
+                self.firstRun = False
 
             #nextTime = (datetime.now().replace(microsecond=0) + 
             #    timedelta(seconds = 1))
@@ -141,24 +146,27 @@ class Scheduler:
                 else (row_height * (1 + int(row[1]) - int(row[0]))))
 
             fastUpdate = config.getboolean(widget, 'fastUpdate', fallback = False)
+            
+            # Strip any numbers from the end of the config section name
+            wdgClassName = widget.rstrip(digits)
 
             try:
                 wdgClass = getattr(
-                    import_module('widgets.{}'.format(widget)), 
-                    widget
+                    import_module('widgets.{}'.format(wdgClassName)),
+                    wdgClassName
                 )
                 wList = self.fastWidgets if fastUpdate else self.regularWidgets
-                wList.append(wdgClass(config,
+                wList.append(wdgClass(widget, config,
                     width = width,
                     height = height,
                     pos = pos
                 ))
             except Exception as e:
-                self.logger.warning("Failed to add widget {}".format(widget))
+                self.logger.warning("Failed to add widgets.{} as {}".format(wdgClassName, widget))
                 self.logger.warning("{}".format(e))
                 continue
             else:
-                self.logger.debug("Imported {} ({})".format(widget, 
+                self.logger.debug("Imported widgets.{} as {} ({})".format(wdgClassName, widget,
                     'fast' if fastUpdate else 'normal'))
             
         self.logger.info("Imported {} widgets".format(
