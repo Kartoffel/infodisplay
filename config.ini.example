@@ -24,8 +24,7 @@ cols = 8
  # uses borderWidth, borderCol
 lines = yes
 lines_hor = # FORMAT: row, col[-col]
-    2, 0-2
-    2, 2-5
+    2, 0-5
     2, 5-8
     9, 0-5
 lines_vert = # FORMAT: col, row[-row]
@@ -66,9 +65,10 @@ enabled = yes
  # Refresh interval in minutes
 refreshInterval = 1
  # Update every second with partial monochrome refreshes
-fastUpdate = yes
+ # (can cause burn-in!)
+fastUpdate = no
  # Display (small) seconds next to time
-displaySeconds = yes
+displaySeconds = no
 flashColon = no
  # row and col span
 row = 0-1
@@ -159,3 +159,38 @@ elements =
     CO2,hackalot/climate/operame,0, ppm
     Spacestate,hackalot/state,raw
 
+[Transport]
+enabled = no
+refreshInterval = 1
+row = 0-1
+col = 0-4
+invert = no
+titleSize = 26
+fontSize = 22
+ # Widget specific
+ # How often to fetch new data from the API (minutes)
+ # (should be divisible by refreshInterval!)
+fetchInterval = 5
+ # Orientation (landscape/portrait)
+orientation = landscape
+ # Show header with name of stop (and optional time)
+showHeader = yes
+showHeaderTime = no
+ # Show footer with line / dest / time (landscape only)
+showFooter = no
+ # Show minutes to departure instead of departure time (HH:MM)
+departureMins = yes
+ # Width of lines between elements (portrait)
+lineWidth = 1
+ # Line color
+lineCol = 64
+ # Information provider
+provider = vertrektijd
+ # Get an API key from https://www.vertrektijd.info/
+apiKey = 
+# Specify town and stop name as "Town, Stop" and the widget will show all lines and directions there
+stopName = Voorburg, Leidschendam-Voorburg
+ # (Comma-separated) list of stop codes, use either stopName or this
+#stopCodes = 
+ # Optional line number filter (comma-separated)
+#lineNumbers = 3, 34
