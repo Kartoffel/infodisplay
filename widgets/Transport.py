@@ -10,14 +10,14 @@ from helpers.fontawesome import FontAwesome
 from datetime import date, datetime, timedelta
 from math import ceil
 
-wName = 'Transport'     
+logging.getLogger('urllib3.connectionpool').setLevel(logging.WARNING)
 
 class Transport:
-    def __init__(self, cfg, width, height, pos):
-        self.name   = __name__
+    def __init__(self, name, cfg, width, height, pos):
+        self.name   = name
         self.logger = logging.getLogger(self.name)
 
-        if wName not in cfg.sections():
+        if self.name not in cfg.sections():
             self.logger.warning('No parameters in config file, using defaults.')
 
         # Below parameters not used by class itself but stored here
@@ -25,35 +25,35 @@ class Transport:
         self.height = height
         self.pos    = pos
 
-        self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
-        self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+        self.refreshInterval = int(cfg.get(self.name, 'refreshInterval', fallback = 10))
+        self.fastUpdate = cfg.getboolean(self.name, 'fastUpdate', fallback = False)
+        self.invert     = cfg.getboolean(self.name, 'invert', fallback = False)
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
         self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
-        self.fontSize   = int(cfg.get(wName, 'fontSize', fallback = 22))
-        self.titleSize  = int(cfg.get(wName, 'titleSize', fallback = 24))
+        self.fontSize   = int(cfg.get(self.name, 'fontSize', fallback = 22))
+        self.titleSize  = int(cfg.get(self.name, 'titleSize', fallback = 24))
         
-        self.lineWidth  = int(cfg.get(wName, 'lineWidth', fallback = 1))
-        self.lineCol    = int(cfg.get(wName, 'lineCol', fallback = 0))
+        self.lineWidth  = int(cfg.get(self.name, 'lineWidth', fallback = 1))
+        self.lineCol    = int(cfg.get(self.name, 'lineCol', fallback = 0))
         
-        self.fetchInterval = int(cfg.get(wName, 'fetchInterval', fallback = 5))
+        self.fetchInterval = int(cfg.get(self.name, 'fetchInterval', fallback = 5))
         
-        self.portrait   = cfg.get(wName, 'orientation', fallback = 'portrait').strip().lower() == 'portrait'
+        self.portrait   = cfg.get(self.name, 'orientation', fallback = 'portrait').strip().lower() == 'portrait'
         
-        self.showHeader = cfg.getboolean(wName, 'showHeader', fallback = True)
-        self.showHeaderTime = cfg.getboolean(wName, 'showHeaderTime', fallback = False)
-        self.showFooter = False if self.portrait else cfg.getboolean(wName, 'showFooter', fallback = False)
+        self.showHeader = cfg.getboolean(self.name, 'showHeader', fallback = True)
+        self.showHeaderTime = cfg.getboolean(self.name, 'showHeaderTime', fallback = False)
+        self.showFooter = False if self.portrait else cfg.getboolean(self.name, 'showFooter', fallback = False)
 
-        self.departureMins = cfg.getboolean(wName, 'departureMins', fallback = False)
-        filterText = cfg.get(wName, 'filterLineNumbers', fallback = '')
+        self.departureMins = cfg.getboolean(self.name, 'departureMins', fallback = False)
+        filterText = cfg.get(self.name, 'filterLineNumbers', fallback = '')
         self.filterLineNumbers = [x.strip() for x in filterText.split(',') if x]
         
        # Choose and load calendar provider
-        provider = cfg.get(wName, 'provider', fallback = None)
+        provider = cfg.get(self.name, 'provider', fallback = None)
         if provider == 'vertrektijd':
             from ._transport_vertrektijd import VertrektijdInfo
             self.provider = VertrektijdInfo(cfg)

@@ -11,17 +11,15 @@ from datetime import date, datetime, timedelta, timezone
 
 logging.getLogger('urllib3.connectionpool').setLevel(logging.WARNING)
 
-wName = 'Rain'
-
 class Rain:
     _API_URL = "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php"
     # https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat={lat}&lon={lon}&region=nl&unit=mm/u
 
-    def __init__(self, cfg, width, height, pos):
-        self.name   = __name__
+    def __init__(self, name, cfg, width, height, pos):
+        self.name   = name
         self.logger = logging.getLogger(self.name)
 
-        if wName not in cfg.sections():
+        if self.name not in cfg.sections():
             self.logger.warning('No parameters in config file, using defaults.')
 
         # Below parameters not used by class itself but stored here
@@ -29,17 +27,17 @@ class Rain:
         self.height = height
         self.pos    = pos
 
-        self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
-        self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+        self.refreshInterval = int(cfg.get(self.name, 'refreshInterval', fallback = 10))
+        self.fastUpdate = cfg.getboolean(self.name, 'fastUpdate', fallback = False)
+        self.invert     = cfg.getboolean(self.name, 'invert', fallback = False)
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
 
         # Widget-specific parameters
-        self.fontSize   = int(cfg.get(wName, 'fontSize', fallback = 22))
-        self.lat        = float(cfg.get(wName, 'lat', fallback = 51.44))
-        self.lon        = float(cfg.get(wName, 'lon', fallback = 5.47))
+        self.fontSize   = int(cfg.get(self.name, 'fontSize', fallback = 22))
+        self.lat        = float(cfg.get(self.name, 'lat', fallback = 51.44))
+        self.lon        = float(cfg.get(self.name, 'lon', fallback = 5.47))
 
         self.timeout = 16
 

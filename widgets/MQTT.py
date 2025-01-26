@@ -6,14 +6,12 @@ from PIL import Image
 from helpers.textfun import Text
 import paho.mqtt.client as mqtt
 
-wName = 'MQTT'
-
 class MQTT:
-    def __init__(self, cfg, width, height, pos):
-        self.name   = __name__
+    def __init__(self, name, cfg, width, height, pos):
+        self.name   = name
         self.logger = logging.getLogger(self.name)
 
-        if wName not in cfg.sections():
+        if self.name not in cfg.sections():
             self.logger.warning('No parameters in config file, using defaults.')
 
         # Below parameters not used by class itself but stored here
@@ -21,21 +19,21 @@ class MQTT:
         self.height = height
         self.pos    = pos
 
-        self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
-        self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+        self.refreshInterval = int(cfg.get(self.name, 'refreshInterval', fallback = 10))
+        self.fastUpdate = cfg.getboolean(self.name, 'fastUpdate', fallback = False)
+        self.invert     = cfg.getboolean(self.name, 'invert', fallback = False)
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
         self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
-        self.fontSize   = int(cfg.get(wName, 'fontSize', fallback = 32))
-        self.titleSize  = int(cfg.get(wName, 'titleSize', fallback = 24))
+        self.fontSize   = int(cfg.get(self.name, 'fontSize', fallback = 32))
+        self.titleSize  = int(cfg.get(self.name, 'titleSize', fallback = 24))
 
         # Parse element config
         self.elements   = []
-        elements = cfg.get(wName, 'elements', fallback = "")
+        elements = cfg.get(self.name, 'elements', fallback = "")
         for element in elements.split('\n'):
             if element:
                 parts = element.split(',')
@@ -59,8 +57,8 @@ class MQTT:
         self.cellWidth = horSize // len(self.elements)
 
         # Set up MQTT
-        self.server     = cfg.get(wName, 'server')
-        self.port       = int(cfg.get(wName, 'port', fallback = 1883))
+        self.server     = cfg.get(self.name, 'server')
+        self.port       = int(cfg.get(self.name, 'port', fallback = 1883))
         self.connected  = False
 
         self.mqttc = mqtt.Client()

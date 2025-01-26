@@ -43,8 +43,6 @@ from datetime import date, datetime, timedelta
 
 logging.getLogger('urllib3.connectionpool').setLevel(logging.WARNING)
 
-wName = 'Weather'
-
 class Weather:
     _API_URL = "https://www.weerplaza.nl/"
     # e.g. https://www.weerplaza.nl/nederland/eindhoven/9020/
@@ -53,11 +51,11 @@ class Weather:
     _wind_dir = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW",
         "SW", "WSW", "W", "WNW", "NW", "NNW"]
 
-    def __init__(self, cfg, width, height, pos):
-        self.name   = __name__
+    def __init__(self, name, cfg, width, height, pos):
+        self.name   = name
         self.logger = logging.getLogger(self.name)
 
-        if wName not in cfg.sections():
+        if self.name not in cfg.sections():
             self.logger.warning('No parameters in config file, using defaults.')
 
         # Below parameters not used by class itself but stored here
@@ -65,22 +63,22 @@ class Weather:
         self.height = height
         self.pos    = pos
 
-        self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 10))
-        self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = False)
-        self.invert     = cfg.getboolean(wName, 'invert', fallback = False)
+        self.refreshInterval = int(cfg.get(self.name, 'refreshInterval', fallback = 10))
+        self.fastUpdate = cfg.getboolean(self.name, 'fastUpdate', fallback = False)
+        self.invert     = cfg.getboolean(self.name, 'invert', fallback = False)
 
         # Global parameters
         self.margin     = int(cfg.get('main', 'widgetMargin', fallback = 6))
         self.font       = cfg.get('main', 'font', fallback = 'Roboto-Regular')
 
         # Widget-specific parameters
-        self.lineWidth  = int(cfg.get(wName, 'lineWidth', fallback = 1))
-        self.lineCol    = int(cfg.get(wName, 'lineCol', fallback = 0))
-        self.locationID = cfg.get(wName, 'locationID',
+        self.lineWidth  = int(cfg.get(self.name, 'lineWidth', fallback = 1))
+        self.lineCol    = int(cfg.get(self.name, 'lineCol', fallback = 0))
+        self.locationID = cfg.get(self.name, 'locationID',
             fallback = 'nederland/eindhoven/9020/')
-        self.numHours   = int(cfg.get(wName, 'hours', fallback = 48))
-        self.skipHour   = int(cfg.get(wName, 'skipHour', fallback = 1))
-        self.numDays    = int(cfg.get(wName, 'days', fallback = 7))
+        self.numHours   = int(cfg.get(self.name, 'hours', fallback = 48))
+        self.skipHour   = int(cfg.get(self.name, 'skipHour', fallback = 1))
+        self.numDays    = int(cfg.get(self.name, 'days', fallback = 7))
 
         self.timeout      = 16
 
@@ -907,6 +905,17 @@ class Weather:
 
         weather = self._parse_page(text)
 
+        # import pickle
+        # Save data
+#        with open('weather.pickle', 'wb') as f:
+#            pickle.dump(weather, f)
+
+        # Open saved data
+#        with open('weather.pickle', 'rb') as f:
+#            weather = pickle.load(f)
+
+        fail = False
+
         if weather:
             # Clear canvas
             self.canvas.paste(0xFF, box=(0, 0, self.width, self.height))
@@ -915,6 +924,16 @@ class Weather:
                 self._draw_forecast(weather)
             except:
                 self.logger.error("Error drawing forecast", exc_info=True)
+                fail = True
+
+        else:
+            fail = True
+
+        if fail:
+            # Save failed responses
+            name = 'failed/page{:%Y%m%d-%H%M%S}.html'.format(self.dt)
+            with open(name, 'w') as f:
+                f.write(text)
 
         return self
 

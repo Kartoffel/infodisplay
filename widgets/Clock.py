@@ -2,14 +2,12 @@ import logging
 from PIL import Image
 from helpers.textfun import Text
 
-wName = 'Clock'
-
 class Clock:
-    def __init__(self, cfg, width, height, pos):
-        self.name   = __name__
+    def __init__(self, name, cfg, width, height, pos):
+        self.name   = name
         self.logger = logging.getLogger(self.name)
 
-        if wName not in cfg.sections():
+        if self.name not in cfg.sections():
             self.logger.warning('No parameters in config file, using defaults.')
 
         # Below parameters not used by class itself but stored here
@@ -17,19 +15,19 @@ class Clock:
         self.height = height
         self.pos    = pos
 
-        self.refreshInterval = int(cfg.get(wName, 'refreshInterval', fallback = 1))
-        self.fastUpdate = cfg.getboolean(wName, 'fastUpdate', fallback = True)
-        self.invert = cfg.getboolean(wName, 'invert', fallback = False)
+        self.refreshInterval = int(cfg.get(self.name, 'refreshInterval', fallback = 1))
+        self.fastUpdate = cfg.getboolean(self.name, 'fastUpdate', fallback = True)
+        self.invert = cfg.getboolean(self.name, 'invert', fallback = False)
 
         # Parameters used by function
-        self.textcolor  = int(cfg.get(wName, 'textColor', fallback = 0))
-        self.seconds    = cfg.getboolean(wName, 'displaySeconds', fallback = True)
-        self.flashColon = cfg.getboolean(wName, 'flashColon', fallback = False)
+        self.textcolor  = int(cfg.get(self.name, 'textColor', fallback = 0))
+        self.seconds    = cfg.getboolean(self.name, 'displaySeconds', fallback = True)
+        self.flashColon = cfg.getboolean(self.name, 'flashColon', fallback = False)
 
         font    = cfg.get('main', 'font', fallback = 'Roboto-Regular')
-        font2   = cfg.get(wName, 'fontSecs', fallback = font)
+        font2   = cfg.get(self.name, 'fontSecs', fallback = font)
 
-        self.hhmm_size  = int(cfg.get(wName, 'fontSize', fallback = 24))
+        self.hhmm_size  = int(cfg.get(self.name, 'fontSize', fallback = 24))
         self.ss_size    = self.hhmm_size // 2
 
         self.hhmm_font  = font
